@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"kv-API/models"
+	"kv-API/internal/models"
 )
 
 func GetHandler(db *sql.DB) http.HandlerFunc {

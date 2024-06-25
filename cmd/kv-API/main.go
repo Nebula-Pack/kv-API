@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"kv-API/config"
-	"kv-API/handlers"
+	"kv-API/internal/config"
+	"kv-API/internal/handlers"
 )
 
 func main() {
