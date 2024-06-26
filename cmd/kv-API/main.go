@@ -1,4 +1,3 @@
-// back-end\key-value-API\cmd\kv-API\main.go
 package main
 
 import (
@@ -21,6 +20,9 @@ func main() {
 	// Set up HTTP routes
 	http.HandleFunc("/get", handlers.GetHandler(db))
 	http.HandleFunc("/post", handlers.PostHandler(db))
+	http.HandleFunc("/save-metadata", handlers.SaveMetadataHandler())
+	http.HandleFunc("/keys", handlers.GetAllKeysHandler(db))
+	http.HandleFunc("/metadata", handlers.GetMetadataHandler()) // New endpoint
 
 	// Start the server
 	fmt.Println("Server is running on port 8080")
