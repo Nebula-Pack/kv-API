@@ -1,3 +1,4 @@
+// back-end\key-value-API\cmd\kv-API\main.go
 package main
 
 import (
@@ -5,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"kv-API/internal/config"
-	"kv-API/internal/handlers"
+	"github.com/Nebula-Pack/kv-API/internal/config"
+	"github.com/Nebula-Pack/kv-API/internal/handlers"
 )
 
 func main() {

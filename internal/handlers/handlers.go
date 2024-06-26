@@ -1,3 +1,4 @@
+// internal/handlers/handlers.go
 package handlers
 
 import (
@@ -5,7 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"kv-API/internal/models"
+	"github.com/Nebula-Pack/kv-API/internal/models"
+	"github.com/Nebula-Pack/kv-API/utils"
 )
 
 func GetHandler(db *sql.DB) http.HandlerFunc {
@@ -39,12 +41,28 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		err := models.SetValue(db, key, value)
+		// Check if the key-value pair is allowed
+		isLua, err := utils.CheckIsLua(key, value)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Fprintf(w, "key-value pair added/updated successfully")
+		if !isLua {
+			http.Error(w, "key-value pair is not allowed", http.StatusForbidden)
+			return
+		}
+
+		err = models.SetValue(db, key, value)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				http.Error(w, "key already exists", http.StatusConflict)
+			} else {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+			return
+		}
+
+		fmt.Fprintf(w, "key-value pair added successfully")
 	}
 }

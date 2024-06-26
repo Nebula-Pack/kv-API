@@ -1,4 +1,4 @@
-module kv-API
+module github.com/Nebula-Pack/kv-API
 
 go 1.22.4
 
