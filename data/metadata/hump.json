@@ -4,7 +4,7 @@
     "hasRockspec": true,
     "isLua": true,
     "scanResponse": {
-      "lua": "\u003e= 5.1"
+      "lua": "lua= 5.1"
     }
   },
   "key": "hump"
