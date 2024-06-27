@@ -7,28 +7,31 @@ import (
 )
 
 type CloneResponse struct {
-	IsLua bool `json:"isLua"`
+	GithubURL    string            `json:"github_url"`
+	IsLua        bool              `json:"isLua"`
+	HasRockspec  bool              `json:"hasRockspec,omitempty"`
+	ScanResponse map[string]string `json:"scanResponse,omitempty"`
 }
 
-func CheckIsLua(repo string) (bool, error) {
+func CheckIsLua(repo string) (CloneResponse, error) {
 	url := "http://localhost:1512/clone"
 
 	data := map[string]string{"Repo": repo}
 	jsonData, err := json.Marshal(data)
 	if err != nil {
-		return false, err
+		return CloneResponse{}, err
 	}
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		return false, err
+		return CloneResponse{}, err
 	}
 	defer resp.Body.Close()
 
 	var cloneResp CloneResponse
 	if err := json.NewDecoder(resp.Body).Decode(&cloneResp); err != nil {
-		return false, err
+		return CloneResponse{}, err
 	}
 
-	return cloneResp.IsLua, nil
+	return cloneResp, nil
 }
