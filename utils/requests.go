@@ -1,4 +1,3 @@
-// utils/request.go
 package utils
 
 import (
@@ -11,10 +10,10 @@ type CloneResponse struct {
 	IsLua bool `json:"isLua"`
 }
 
-func CheckIsLua(key, value string) (bool, error) {
-	url := "http://localhost:4242/clone"
+func CheckIsLua(repo string) (bool, error) {
+	url := "http://localhost:1512/clone"
 
-	data := map[string]string{"key": key, "value": value}
+	data := map[string]string{"Repo": repo}
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return false, err

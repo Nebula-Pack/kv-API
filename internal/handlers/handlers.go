@@ -35,14 +35,14 @@ func GetHandler(db *sql.DB) http.HandlerFunc {
 func PostHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		key := r.URL.Query().Get("key")
-		value := r.URL.Query().Get("value")
-		if key == "" || value == "" {
-			http.Error(w, "key and value are required", http.StatusBadRequest)
+		repo := r.URL.Query().Get("value") // Assume the 'value' parameter is the repo here
+		if key == "" || repo == "" {
+			http.Error(w, "key and repo are required", http.StatusBadRequest)
 			return
 		}
 
 		// Check if the key-value pair is allowed
-		isLua, err := utils.CheckIsLua(key, value)
+		isLua, err := utils.CheckIsLua(repo)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -53,7 +53,7 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		err = models.SetValue(db, key, value)
+		err = models.SetValue(db, key, repo)
 		if err != nil {
 			if err == sql.ErrNoRows {
 				http.Error(w, "key already exists", http.StatusConflict)
