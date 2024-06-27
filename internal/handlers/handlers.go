@@ -35,13 +35,12 @@ func GetHandler(db *sql.DB) http.HandlerFunc {
 func PostHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		key := r.URL.Query().Get("key")
-		repo := r.URL.Query().Get("value") // Assume the 'value' parameter is the repo here
+		repo := r.URL.Query().Get("value")
 		if key == "" || repo == "" {
 			http.Error(w, "key and repo are required", http.StatusBadRequest)
 			return
 		}
 
-		// Check if the key-value pair is allowed
 		isLua, err := utils.CheckIsLua(repo)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -64,5 +63,24 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		fmt.Fprintf(w, "key-value pair added successfully")
+	}
+}
+
+func AdminOverwriteHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		key := r.URL.Query().Get("key")
+		repo := r.URL.Query().Get("value")
+		if key == "" || repo == "" {
+			http.Error(w, "key and repo are required", http.StatusBadRequest)
+			return
+		}
+
+		err := models.SetValue(db, key, repo)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprintf(w, "key-value pair overwritten successfully")
 	}
 }

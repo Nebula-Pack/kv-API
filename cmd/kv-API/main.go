@@ -7,24 +7,26 @@ import (
 
 	"github.com/Nebula-Pack/kv-API/internal/config"
 	"github.com/Nebula-Pack/kv-API/internal/handlers"
+	"github.com/Nebula-Pack/kv-API/internal/middleware"
 )
 
 func main() {
-	// Initialize the database
 	db, err := config.InitDB()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	// Set up HTTP routes
 	http.HandleFunc("/get", handlers.GetHandler(db))
 	http.HandleFunc("/post", handlers.PostHandler(db))
 	http.HandleFunc("/save-metadata", handlers.SaveMetadataHandler())
 	http.HandleFunc("/keys", handlers.GetAllKeysHandler(db))
-	http.HandleFunc("/metadata", handlers.GetMetadataHandler()) // New endpoint
+	http.HandleFunc("/metadata", handlers.GetMetadataHandler())
 
-	// Start the server
+	// Admin routes
+	http.Handle("/admin/overwrite", middleware.AdminAuth(http.HandlerFunc(handlers.AdminOverwriteHandler(db))))
+	http.HandleFunc("/admin/login", handlers.AdminLoginHandler())
+
 	fmt.Println("Server is running on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
