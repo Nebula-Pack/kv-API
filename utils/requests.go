@@ -11,6 +11,7 @@ type CloneResponse struct {
 	IsLua        bool              `json:"isLua"`
 	HasRockspec  bool              `json:"hasRockspec,omitempty"`
 	ScanResponse map[string]string `json:"scanResponse,omitempty"`
+	Version      string            `json:"version"` // Include the version field
 }
 
 func CheckIsLua(repo string) (CloneResponse, error) {

@@ -55,7 +55,7 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 func saveMetadata(key string, cloneResp utils.CloneResponse) error {
 	metadata := map[string]interface{}{
 		"key":  key,
-		"data": cloneResp,
+		"data": cloneResp, // Directly using cloneResp as the value of the data key
 	}
 
 	metadataDir := "./data/metadata"

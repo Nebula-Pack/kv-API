@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 func GetMetadataHandler() http.HandlerFunc {
@@ -32,6 +33,31 @@ func GetMetadataHandler() http.HandlerFunc {
 		err = json.NewDecoder(file).Decode(&metadata)
 		if err != nil {
 			http.Error(w, "Failed to read metadata", http.StatusInternalServerError)
+			return
+		}
+
+		// Update metadata with latest GET request info
+		metadata["temporal_semantics"] = map[string]interface{}{
+			"latest-get-request": time.Now().Format(time.RFC3339),
+		}
+
+		// Save updated metadata back to file
+		file, err = os.Create(filePath)
+		if err != nil {
+			http.Error(w, "Failed to create metadata file", http.StatusInternalServerError)
+			return
+		}
+		defer file.Close()
+
+		jsonData, err := json.MarshalIndent(metadata, "", "  ")
+		if err != nil {
+			http.Error(w, "Failed to serialize JSON payload", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = file.Write(jsonData)
+		if err != nil {
+			http.Error(w, "Failed to write to metadata file", http.StatusInternalServerError)
 			return
 		}
 
