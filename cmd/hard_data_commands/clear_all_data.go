@@ -18,15 +18,22 @@ func main() {
 	}
 	fmt.Println("SQLite database cleared successfully.")
 
-	// Path to metadata folder
+	// Paths to metadata folders
 	metadataFolderPath := "data/metadata"
+	verMetadataFolderPath := "data/ver_metadata"
 
-	// Clear metadata folder
-	err = clearMetadataFolder(metadataFolderPath)
+	// Clear metadata folders
+	err = clearFolder(metadataFolderPath)
 	if err != nil {
 		log.Fatalf("Failed to clear metadata folder: %v", err)
 	}
 	fmt.Println("Metadata folder cleared successfully.")
+
+	err = clearFolder(verMetadataFolderPath)
+	if err != nil {
+		log.Fatalf("Failed to clear ver_metadata folder: %v", err)
+	}
+	fmt.Println("Ver_metadata folder cleared successfully.")
 }
 
 // Function to clear SQLite database
@@ -38,8 +45,8 @@ func clearSQLiteDB(dbPath string) error {
 	return nil
 }
 
-// Function to clear metadata folder
-func clearMetadataFolder(folderPath string) error {
+// Function to clear a folder
+func clearFolder(folderPath string) error {
 	err := filepath.Walk(folderPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -53,7 +60,7 @@ func clearMetadataFolder(folderPath string) error {
 		return nil
 	})
 	if err != nil {
-		return fmt.Errorf("error walking through metadata folder: %w", err)
+		return fmt.Errorf("error walking through folder %s: %w", folderPath, err)
 	}
 	return nil
 }

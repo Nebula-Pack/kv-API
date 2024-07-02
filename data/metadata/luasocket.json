@@ -6,7 +6,7 @@
     "scanResponse": {
       "lua": "\u003e= 5.1"
     },
-    "version": "v3.1.0"
+    "version": ""
   },
   "key": "luasocket"
 }

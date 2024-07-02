@@ -1,6 +1,6 @@
 {
   "data": {
-    "github_url": "https://github.com/vrld/hump",
+    "github_url": "https://github.com/keplerproject/luafilesystem",
     "isLua": true,
     "hasRockspec": true,
     "scanResponse": {
@@ -8,5 +8,5 @@
     },
     "version": ""
   },
-  "key": "hump"
+  "key": "luafs"
 }

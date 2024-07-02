@@ -15,7 +15,7 @@ type CloneResponse struct {
 }
 
 func CheckIsLua(repo, version string) (CloneResponse, error) {
-	url := "http://localhost:1512/clone"
+	url := "http://localhost:1912/clone"
 
 	data := map[string]string{"repo": repo}
 	if version != "" {

@@ -51,6 +51,13 @@ func MetadataVersionHandler(db *sql.DB) http.HandlerFunc {
 					return
 				}
 
+				// Check if isLua is false
+				if !cloneResp.IsLua {
+					w.WriteHeader(http.StatusBadRequest)
+					w.Write([]byte("invalid package"))
+					return
+				}
+
 				// Save the response as JSON in ver_metadata directory
 				err = saveVersionedMetadata(key, version, cloneResp)
 				if err != nil {
