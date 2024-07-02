@@ -3,5 +3,8 @@
     "github_url": "https://github.com/LuaJIT/LuaJIT",
     "isLua": true
   },
-  "key": "LuaJIT"
+  "key": "LuaJIT",
+  "temporal_semantics": {
+    "latest-get-request": "2024-06-30T22:30:14+02:00"
+  }
 }

@@ -27,6 +27,7 @@ func main() {
 	http.HandleFunc("/save-metadata", handlers.SaveMetadataHandler())
 	http.HandleFunc("/keys", handlers.GetAllKeysHandler(db))
 	http.HandleFunc("/metadata", handlers.GetMetadataHandler())
+	http.HandleFunc("/metadata-version", handlers.MetadataVersionHandler(db)) // Updated to pass db
 
 	// Admin routes
 	http.Handle("/admin/overwrite", middleware.AdminAuth(http.HandlerFunc(handlers.AdminOverwriteHandler(db))))

@@ -3,5 +3,8 @@
     "github_url": "https://github.com/vrld/moonshine",
     "isLua": true
   },
-  "key": "moonshine"
+  "key": "moonshine",
+  "temporal_semantics": {
+    "latest-get-request": "2024-06-30T22:29:23+02:00"
+  }
 }

@@ -1,0 +1,12 @@
+{
+  "data": {
+    "github_url": "https://github.com/vrld/hump",
+    "isLua": true,
+    "hasRockspec": true,
+    "scanResponse": {
+      "lua": "\u003e= 5.1"
+    },
+    "version": "08937cc0ecf72d1a964a8de6cd552c5e136bf0d4"
+  },
+  "key": "humpe"
+}

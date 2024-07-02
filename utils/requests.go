@@ -14,10 +14,13 @@ type CloneResponse struct {
 	Version      string            `json:"version"` // Include the version field
 }
 
-func CheckIsLua(repo string) (CloneResponse, error) {
+func CheckIsLua(repo, version string) (CloneResponse, error) {
 	url := "http://localhost:1512/clone"
 
-	data := map[string]string{"Repo": repo}
+	data := map[string]string{"repo": repo}
+	if version != "" {
+		data["version"] = version
+	}
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return CloneResponse{}, err

@@ -16,12 +16,13 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		key := r.URL.Query().Get("key")
 		repo := r.URL.Query().Get("value")
+		version := r.URL.Query().Get("version") // Optional version parameter
 		if key == "" || repo == "" {
 			http.Error(w, "key and repo are required", http.StatusBadRequest)
 			return
 		}
 
-		cloneResp, err := utils.CheckIsLua(repo)
+		cloneResp, err := utils.CheckIsLua(repo, version)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
