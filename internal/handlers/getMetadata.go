@@ -36,12 +36,12 @@ func GetMetadataHandler() http.HandlerFunc {
 			return
 		}
 
-		// Update metadata with latest GET request info
+		// Update metadata with the latest GET request info
 		metadata["temporal_semantics"] = map[string]interface{}{
 			"latest-get-request": time.Now().Format(time.RFC3339),
 		}
 
-		// Save updated metadata back to file
+		// Save updated metadata back to the file
 		file, err = os.Create(filePath)
 		if err != nil {
 			http.Error(w, "Failed to create metadata file", http.StatusInternalServerError)

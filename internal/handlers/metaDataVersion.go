@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/Nebula-Pack/kv-API/internal/models"
 	"github.com/Nebula-Pack/kv-API/utils"
@@ -65,9 +66,37 @@ func MetadataVersionHandler(db *sql.DB) http.HandlerFunc {
 					return
 				}
 
-				// Return the clone response
+				// Update metadata with the latest GET request info
+				metadata := map[string]interface{}{
+					"data": cloneResp,
+					"temporal_semantics": map[string]interface{}{
+						"latest-get-request": time.Now().Format(time.RFC3339),
+					},
+				}
+
+				// Save updated metadata back to the file
+				file, err = os.Create(filePath)
+				if err != nil {
+					http.Error(w, "Failed to create metadata file", http.StatusInternalServerError)
+					return
+				}
+				defer file.Close()
+
+				jsonData, err := json.MarshalIndent(metadata, "", "  ")
+				if err != nil {
+					http.Error(w, "Failed to serialize JSON payload", http.StatusInternalServerError)
+					return
+				}
+
+				_, err = file.Write(jsonData)
+				if err != nil {
+					http.Error(w, "Failed to write to metadata file", http.StatusInternalServerError)
+					return
+				}
+
+				// Return the metadata response
 				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(cloneResp)
+				json.NewEncoder(w).Encode(metadata)
 				return
 			}
 			http.Error(w, fmt.Sprintf("error opening metadata file: %v", err), http.StatusInternalServerError)
@@ -83,11 +112,34 @@ func MetadataVersionHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(metadata)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("error encoding JSON payload: %v", err), http.StatusInternalServerError)
+		// Update metadata with the latest GET request info
+		metadata["temporal_semantics"] = map[string]interface{}{
+			"latest-get-request": time.Now().Format(time.RFC3339),
 		}
+
+		// Save updated metadata back to the file
+		file, err = os.Create(filePath)
+		if err != nil {
+			http.Error(w, "Failed to create metadata file", http.StatusInternalServerError)
+			return
+		}
+		defer file.Close()
+
+		jsonData, err := json.MarshalIndent(metadata, "", "  ")
+		if err != nil {
+			http.Error(w, "Failed to serialize JSON payload", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = file.Write(jsonData)
+		if err != nil {
+			http.Error(w, "Failed to write to metadata file", http.StatusInternalServerError)
+			return
+		}
+
+		// Return JSON response
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(metadata)
 	}
 }
 
@@ -105,7 +157,14 @@ func saveVersionedMetadata(key, version string, cloneResp utils.CloneResponse) e
 	}
 	defer file.Close()
 
-	jsonData, err := json.MarshalIndent(cloneResp, "", "  ")
+	metadata := map[string]interface{}{
+		"data": cloneResp,
+		"temporal_semantics": map[string]interface{}{
+			"latest-get-request": time.Now().Format(time.RFC3339),
+		},
+	}
+
+	jsonData, err := json.MarshalIndent(metadata, "", "  ")
 	if err != nil {
 		return err
 	}
