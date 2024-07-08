@@ -1,0 +1,12 @@
+{
+  "data": {
+    "github_url": "https://github.com/vrld/suit",
+    "isLua": true,
+    "hasRockspec": true,
+    "scanResponse": {
+      "lua": "\u003e= 5.1"
+    },
+    "version": "v0.10"
+  },
+  "key": "suit"
+}

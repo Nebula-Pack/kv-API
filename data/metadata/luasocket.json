@@ -1,0 +1,12 @@
+{
+  "data": {
+    "github_url": "https://github.com/lunarmodules/luasocket",
+    "isLua": true,
+    "hasRockspec": true,
+    "scanResponse": {
+      "lua": "\u003e= 5.1"
+    },
+    "version": "v3.1.0"
+  },
+  "key": "luasocket"
+}
